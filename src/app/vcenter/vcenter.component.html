@@ -1,0 +1,282 @@
+  <div class="modal" id="deletevc" role="dialog" aria-labelledby="myModalDlgLabel-confirm" aria-hidden="true" tabindex='1' data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog n-dialog-confirm">
+      <div class="modal-content" >
+        <div class="modal-header">
+          <div class="n-dialog-header-fg-filler">
+            <h1 class="modal-title">Do you want to delete the vcenter?</h1>
+          </div>
+          <div class="n-dialog-header-bg-filler"></div>
+          <div class="n-dialog-header-curve">
+            <div class="fg-mask"></div>
+            <div class="bg-mask"></div>
+            <div class="fg-corner"></div>
+            <div class="bg-corner"></div>
+          </div>
+          <i role="button" class="icon icon-close-rounded" data-dismiss="modal" aria-label="Close"  tabindex="3"></i>
+          <div style="clear: both"></div>
+          <div class="modal-title-confirm"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-standard" data-dismiss="modal" (click)="onDeleteConfirm()" tabindex="4">Delete {{deletename}}</button>
+          <button class="btn btn-standard btn-defaultBlue" data-dismiss="modal" tabindex="2" >Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal active" id="editvc" role="dialog" aria-labelledby="modal-title-active" aria-hidden="true" tabindex='-1' data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="n-dialog-header-fg-filler">
+              <h1 class="modal-title-active">Edit vCenter</h1>
+          </div>
+          <div class="n-dialog-header-bg-filler"></div>
+          <div class="n-dialog-header-curve">
+            <div class="fg-mask"></div>
+            <div class="bg-mask"></div>
+            <div class="fg-corner"></div>
+            <div class="bg-corner"></div>
+          </div>
+          <i role="button" class="icon icon-close-rounded" data-dismiss="modal" aria-label="Close dialog"></i> 
+        </div>
+        <form #editvc="ngForm">
+        <div class="modal-body">
+          <div class="row formrow">
+            <div class="col-sm-6 attrlabel">
+                <label class="control-label">Name:</label>
+            </div>
+            <div class="col-sm-6">
+              <input type="text" class="form-control n-inputfield" id="editname" [(ngModel)]="currentVcenter.name" required name="editname" #editname="ngModel">
+              <a class="form-control-feedback">
+              <span class="icon icon-mandatory"></span></a>
+              <div *ngIf="editname.errors && (editname.dirty || editname.touched)" class="custom-error">
+                <div [hidden]="!editname.errors.required">
+                  <span class="icon icon-error"></span>                                
+                  Name is required!
+                </div>        
+              </div>
+          </div>
+          </div>
+          <div class="row formrow">
+            <div class="col-sm-6 attrlabel">
+              <label class="control-label">IP Address:</label>
+            </div>
+            <div class="col-sm-6">
+              <input type="text" class="form-control n-inputfield" id="editipaddress" [(ngModel)]="currentVcenter.ipaddress" required name="editipaddress" #editipaddress="ngModel">
+              <a class="form-control-feedback">
+              <span class="icon icon-mandatory"></span></a>
+              <div *ngIf="editipaddress.errors && (editipaddress.dirty || editipaddress.touched)" class="custom-error">
+                  <div [hidden]="!editipaddress.errors.required">
+                      <span class="icon icon-error"></span>                                
+                      IP Address/Host Name is required!
+                  </div>        
+              </div>
+            </div>
+          </div>
+          <div class="row formrow">
+            <div class="col-sm-6 attrlabel">
+              <label class="control-label">User Name:</label>
+            </div>
+            <div class="col-sm-6">
+              <input type="text" class="form-control n-inputfield" id="editusername" [(ngModel)]="currentVcenter.username" required name="editusername" #editusername="ngModel">
+              <a class="form-control-feedback">
+              <span class="icon icon-mandatory"></span></a>
+              <div *ngIf="editusername.errors && (editusername.dirty || editusername.touched)" class="custom-error">
+                <div [hidden]="!editusername.errors.required">
+                  <span class="icon icon-error"></span>                                
+                  User Name is required!
+                </div>        
+              </div>
+            </div>
+          </div>
+          <div class="row formrow">
+            <div class="col-sm-6 attrlabel">
+              <label class="control-label">Password:</label>
+            </div>
+            <div class="col-sm-6">
+              <input type="password" class="form-control n-inputfield" id="editpassword" [(ngModel)]="currentVcenter.password" required name="editpassword" #editpassword="ngModel">
+              <a class="form-control-feedback">
+              <span class="icon icon-mandatory"></span></a>
+              <div *ngIf="editpassword.errors && (editpassword.dirty || editpassword.touched)" class="custom-error">
+                <div [hidden]="!editpassword.errors.required">
+                  <span class="icon icon-error"></span>                                
+                  Password is required!
+                </div>        
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-standard" (click)="onEditConfirm()" [disabled]="!editvc.form.valid">Save</button>
+          <button class="btn btn-standard" data-dismiss="modal" (click)="onEditCancel()">Cancel</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div> 
+  <div class="modal active" id="addvc" role="dialog" aria-labelledby="modal-title-active" aria-hidden="true" tabindex='-1' data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="n-dialog-header-fg-filler">
+                <h1 class="modal-title-active">Add vCenter</h1>
+            </div>
+            <div class="n-dialog-header-bg-filler"></div>
+            <div class="n-dialog-header-curve">
+              <div class="fg-mask"></div>
+              <div class="bg-mask"></div>
+              <div class="fg-corner"></div>
+              <div class="bg-corner"></div>
+            </div>
+            <i role="button" class="icon icon-close-rounded" data-dismiss="modal" aria-label="Close dialog"></i> 
+          </div>
+          <form #addvc="ngForm">
+          <div class="modal-body">
+              <div class="row formrow">
+                <div class="col-sm-6 attrlabel">
+                    <label class="control-label">Name:</label>
+                </div>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control n-inputfield" required id="name" [(ngModel)]="addVcenter.name" name="name" #name="ngModel">
+                    <a class="form-control-feedback">
+                    <span class="icon icon-mandatory"></span></a>
+                    <div *ngIf="name.errors && (name.dirty || name.touched)" class="custom-error">
+                        <div [hidden]="!name.errors.required">
+                            <span class="icon icon-error"></span>                                
+                            Name is required!
+                        </div>        
+                    </div>
+                </div>
+              </div>
+              <div class="row formrow">
+                <div class="col-sm-6 attrlabel">
+                  <label class="control-label">IP Address/Host Name:</label>
+                </div>
+                <div class="col-sm-6">
+                  <input type="text" class="form-control n-inputfield" required id="hostname" [(ngModel)]="addVcenter.ipaddress" name="hostname" #hostname="ngModel">
+                  <a class="form-control-feedback">
+                  <span class="icon icon-mandatory"></span></a>
+                  <div *ngIf="hostname.errors && (hostname.dirty || hostname.touched)" class="custom-error">
+                      <div [hidden]="!hostname.errors.required">
+                          <span class="icon icon-error"></span>                                
+                          IP Address/Host Name is required!
+                      </div>        
+                  </div>
+                </div>
+              </div>
+              <div class="row formrow">
+                <div class="col-sm-6 attrlabel">
+                  <label class="control-label">User Name:</label>
+                </div>
+                <div class="col-sm-6">
+                  <input type="text" class="form-control n-inputfield" required id="username" [(ngModel)]="addVcenter.username" name="username" #username="ngModel">
+                  <a class="form-control-feedback">
+                  <span class="icon icon-mandatory"></span></a>
+                  <div *ngIf="username.errors && (username.dirty || username.touched)" class="custom-error">
+                      <div [hidden]="!username.errors.required">
+                          <span class="icon icon-error"></span>                                
+                          User Name is required!
+                      </div>        
+                  </div>
+                </div>
+              </div>
+              <div class="row formrow">
+                <div class="col-sm-6 attrlabel">
+                  <label class="control-label">Password:</label>
+                </div>
+                <div class="col-sm-6">
+                  <input type="password" class="form-control n-inputfield" required id="password" [(ngModel)]="addVcenter.password" name="password" #password="ngModel">
+                  <a class="form-control-feedback">
+                  <span class="icon icon-mandatory"></span></a>
+                  <div *ngIf="password.errors && (password.dirty || password.touched)" class="custom-error">
+                      <div [hidden]="!password.errors.required">
+                          <span class="icon icon-error"></span>                                
+                          Password is required!
+                      </div>        
+                  </div>
+                </div>
+              </div>
+            
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-standard" (click)="onAddConfirm()" [disabled]="!addvc.form.valid">Save</button>
+            <button class="btn btn-standard" data-dismiss="modal">Cancel</button>
+           </div>
+          </form>
+        </div>
+      </div>
+    </div>
+	<div class="modal" id="ErrorDialog" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" tabindex='-1'>
+  <div class="modal-dialog n-dialog-critical">
+    <div class="modal-content" id="TA-dialog-error-content">
+      <div class="modal-header" id="TA-dialog-error-content-header">
+        <div class="n-dialog-header-fg-filler">
+                <h1 class="modal-title" id="myModalLabel"><span class="icon icon-error"></span>{{errorheading}}</h1>
+        </div>
+        <div class="n-dialog-header-bg-filler"></div>
+          <!-- -->
+        <div class="n-dialog-header-curve">
+            <div class="fg-mask"></div>
+            <div class="bg-mask"></div>
+            <div class="fg-corner"></div>
+            <div class="bg-corner"></div>
+        </div>
+        <i role="button" class="icon icon-close-rounded" data-dismiss="modal" aria-label="Close" tabindex="4" id="TA-dialog-error-content-close"></i>
+        <div style="clear: both"></div>
+        <div class="modal-title-error-warning" id="myModalLabelInstruction">{{errorMessage}}</div>
+      </div>
+      <div class="modal-footer" id="TA-dialog-error-footer">
+        <button class="btn btn-standard" data-dismiss="modal" tabindex="3" id="TA-dialog-error-buttons-cancel">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="panel panel-shadow panel-blue-cap">
+    <div class="panel-heading">
+      <div>
+        <h1>{{pageHeading}}</h1>
+      </div>
+    </div>
+    <div class="panel-body panel-body-height-align">
+      <div class="panel-section tabel-panel-section">   
+        <div class="row toolbar">
+          <button id="btn-refresh" class="btn btn-icon" title="Refresh" (click)="onRefreshClick()">
+            <span class="icon icon-refresh"></span>
+          </button>
+          <button id="btn-add" class="btn btn-icon" title="Add" data-toggle="modal" data-target="#addvc">
+            <span class="icon jqx-icon-plus"></span>
+          </button>
+          <button id="btn-edit" class="btn btn-icon" title="Edit" [disabled]="editdeletedisable" data-toggle="modal" data-target="#editvc">
+            <span class="icon icon-edit" ></span>
+          </button>
+          <button id="btn-delete" class="btn btn-icon" title="Delete" [disabled]="editdeletedisable" data-toggle="modal" data-target="#deletevc">
+            <span class="icon icon-delete"></span>
+          </button>
+        </div>
+        <div class="row formrow">
+          <div class="col-md-12" style="height: 100%;">
+            <!-- <table class="n-table n-table-standard n-table-striped n-table-hover">
+              <thead>
+                <tr>
+                  <th style="width:250px;">Name</th>
+                  <th style="width:250px;">IP Address</th>
+                  <th style="width:250px;">User Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let vcenter of vcenters" (click)="onSelectvcenter(vcenter, $event)">
+                  <td>{{vcenter.name}}</td>
+                  <td>{{vcenter.ipaddress}}</td>
+                  <td>{{vcenter.username}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div> -->
+          <div id="myDiv"></div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+

@@ -1,0 +1,147 @@
+<nav class="n-banner condensed">
+<div class="n-banner-1st-filler-white"></div>
+<div class="n-banner-1st-filler-blue"></div>
+<div class="n-banner-2nd-filler-blue hidden-xs hidden-on-blue-detached"></div>
+<div class="n-banner-2nd-filler-gray hidden-xs"></div>
+<div class="n-banner-3rd-filler-gray hidden-xs"></div>
+    <div class="container-fluid">
+        <div class="n-banner-header">
+            <button class="n-banner-toggle collapsed" data-target="#n-banner-collapse" data-toggle="collapse" type="button">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="n-banner-brand" href="#">
+                <h1 class="n-product-name-condensed">Virtual 1830</h1>
+            </a>
+        </div>
+
+        <div class="collapse n-banner-collapse" id="n-banner-collapse">
+            <div class="row n-banner-1st">
+                <div class="n-banner-right n-banner-logo-img hidden-xs">
+                    <img alt="Nokia" src="assets/wulfdist/img/logo.png">
+                </div>
+
+                <div class="n-banner-right n-banner-1st-gray-to-white hidden-xs">
+                    <div class="gray-mask"></div>
+                    <div class="white-mask"></div>
+                    <div class="gray-corner"></div>
+                    <div class="white-corner"></div>
+                </div>
+                <ul class="n-banner-right n-banner-nav n-banner-controls">
+                    <li>
+                        <a href="#">
+                            <i class="icon icon-profile"></i>
+                            {{username}}
+                        </a>
+                    </li>
+                    <li class="hidden-xs">
+                        <p>
+                            |
+                        </p>
+                    </li>
+                    <li>
+                        <a href="#">
+                            Log Out
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="n-banner-right n-banner-1st-blue-to-gray hidden-xs">
+                    <div class="blue-mask"></div>
+                    <div class="gray-mask"></div>
+                    <div class="blue-corner"></div>
+                    <div class="gray-corner"></div>
+                </div>
+                <!-- <div class="n-banner-right n-search">
+                    <a class="n-search-icon" href="javascript:void(0)" >
+                        <span class="icon icon-search"></span>
+                    </a>
+                    <input type="text" class="n-inputfield n-search-input">
+                </div> -->
+            </div>
+
+            <div class="row n-banner-2nd">
+
+                <ul class="n-banner-nav n-banner-tabs">
+
+                    <li class="dropdown">
+                        <a aria-expanded="false" class="n-banner-dropdown-toggle" data-toggle="dropdown" href="#" role="button">
+                            <span>Deployment</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a routerLink="/simplevm" routerLinkActive="active"><span>Single VM</span></a>
+                            </li>
+                            <li class="n-dropdown-menu-item-has-child">
+                                <a href="#"><span>Multi VM</span><i class="icon icon-next"></i></a>
+                                <ul class="n-dropdown-sub-menu">
+                                    <li><a href="#"><span>SimList</span></a></li>
+                                    <li><a href="#"><span>Deploy</span></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a aria-expanded="false" class="n-banner-dropdown-toggle" data-toggle="dropdown" href="#" role="button">
+                            <span>Management</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="#"><span>Configurations</span></a>
+                            </li>
+                            <li>
+                                <a href="#"><span>Virtual Machines</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a aria-expanded="false" class="n-banner-dropdown-toggle" data-toggle="dropdown" href="#" role="button">
+                            <span>Configuration</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="#"><span>OVF</span></a>
+                            </li>
+                            <li>
+                                <a routerLink="/vCenter" routerLinkActive="active"><span>vCenter</span></a>
+                            </li>
+                            <li>
+                                <a href="#"><span>Resource</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a aria-expanded="false" class="n-banner-dropdown-toggle" data-toggle="dropdown" href="#" role="button">
+                            <span>Logs</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="#"><span>Deployments</span></a>
+                            </li>
+                            <li>
+                                <a href="#"><span>Migrations</span></a>
+                            </li>
+                            <li>
+                                <a href="#"><span>Upgrades</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="n-banner-2nd-gray-to-blue hidden-xs hidden-on-blue-detached">
+                    <div class="gray-mask"></div>
+                    <div class="blue-mask"></div>
+                    <div class="gray-corner"></div>
+                    <div class="blue-corner"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</nav>

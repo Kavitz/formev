@@ -1,0 +1,7 @@
+# @AngularClass
+/node_modules/
+/dist/
+/dll/
+/.idea/
+/npm-debug.log
+/.awcache/
