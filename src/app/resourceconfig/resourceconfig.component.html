@@ -1,0 +1,532 @@
+<div class="vr-app-container">
+<div class="modal active" id="addresource" role="dialog" aria-labelledby="modal-title-active" aria-hidden="true" tabindex='-1' data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="n-dialog-header-fg-filler">
+                    <h1 class="modal-title-active">Add Resource Configuration</h1>
+                </div>
+                <div class="n-dialog-header-bg-filler"></div>
+				<div class="n-dialog-header-curve">
+					<div class="fg-mask"></div>
+					<div class="bg-mask"></div>
+					<div class="fg-corner"></div>
+					<div class="bg-corner"></div>
+				</div>
+                <i role="button" class="icon icon-close-rounded" data-dismiss="modal" aria-label="Close dialog" (click)="onAddCancel()"></i> 
+            </div>
+			<form #addresource="ngForm" (ngSubmit)="onAddConfirm()">
+            <div class="modal-body">
+            	<div class="row formrow">
+                	<div class="col-sm-6 attrlabel">
+                    	<label class="control-label">Name:</label>
+                    </div>
+                    <div class="col-sm-6">
+                    	<input type="text" class="form-control n-inputfield" [(ngModel)]="addResource.name" required id="rname" name="rname" #rname="ngModel">
+						<a class="form-control-feedback">
+						<span class="icon icon-mandatory"></span></a>
+						<div *ngIf="rname.errors && (rname.dirty || rname.touched)" class="custom-error">
+                        	<div [hidden]="!rname.errors.required">
+                            	<span class="icon icon-error"></span>
+                                Name is required!
+                            </div>
+                         </div>	
+					</div>
+				</div>
+				<div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                	    <label class="control-label">Server IP:</label>
+                    </div>
+                    <div class="col-sm-6">
+						<input type="text" class="form-control n-inputfield" [(ngModel)]="addResource.serverip" [disabled]="true" id="serverip" name="serverip" 
+						#serverip="ngModel">
+					</div>
+				</div>
+				<div class="row formrow">
+					<div class="col-sm-6 attrlabel">
+						<label class="control-label">OVF Template:</label>
+					</div>
+					<div class="col-sm-6">
+						<select required [(ngModel)]="addResource.ovftemplate" name="ovf" id="ovf" #ovf="ngModel" class="addresourceselect">
+							<option *ngFor="let ovftemplate of ovftemplates" [ngValue]="ovftemplate">{{ovftemplate.name}}</option>
+						</select>
+						<a class="form-control-feedback">
+						<span class="icon icon-mandatory"></span></a>
+							<div *ngIf="ovf.errors && (ovf.dirty || ovf.touched)" class="custom-error">
+								<div [hidden]="!ovf.errors.required">
+									<span class="icon icon-error"></span>                                
+									OVF Template is required!
+								</div>        
+							</div>
+					</div>
+				</div>
+				<div class="row formrow">
+					<div class="col-sm-6 attrlabel">
+						<label class="control-label">vCenter:</label>
+					</div>
+					<div class="col-sm-6">
+						<select required [(ngModel)]="addResource.vcenter" name="vc" id="vc" #vc="ngModel" (change)="onvCenterChange()" class="addresourceselect">
+							<option *ngFor="let vcenters of vcenters" [ngValue]="vcenters" >{{vcenters.name}}</option>
+						</select>
+						<a class="form-control-feedback">
+						<span class="icon icon-mandatory"></span></a>
+						<div *ngIf="vc.errors && (vc.dirty || vc.touched)" class="custom-error">
+							<div [hidden]="!vc.errors.required">
+								<span class="icon icon-error"></span>
+								vCenter is required!
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row formrow">
+					<div class="col-sm-6 attrlabel">
+						<label class="control-label">Data Center:</label>
+					</div>
+                    <div class="col-sm-6">
+                        <select required [(ngModel)]="addResource.datacenter" name="dc" id="dc" #dc="ngModel" [disabled]="addResource.vcenter == ''"
+							(change)="onDataStoreChange()" class="addresourceselect">
+							<option *ngFor="let dcs of datacenters" [value]="dcs" >{{dcs}}</option>
+                        </select>
+						<a class="form-control-feedback">
+						<span class="icon icon-mandatory"></span></a>
+                        <div *ngIf="dc.errors && (dc.dirty || dc.touched)" class="custom-error">
+                            <div [hidden]="!dc.errors.required">
+                                <span class="icon icon-error"></span>
+								DataCenter is required!
+ 							</div>
+                        </div>
+                    </div>
+                </div>
+				<div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">Data Store:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <select required [(ngModel)]="addResource.datastore" name="ds" id="ds" #ds="ngModel" [disabled]="addResource.datacenter == ''" 
+						class="addresourceselect">
+                            <option *ngFor="let dst of datastores" [ngValue]="dst" >{{dst}}</option>
+                        </select>
+                        <a class="form-control-feedback">
+                        <span class="icon icon-mandatory"></span></a>
+                        <div *ngIf="ds.errors && (ds.dirty || ds.touched)" class="custom-error">
+                            <div [hidden]="!ds.errors.required">
+                                <span class="icon icon-error"></span>
+								DataStore is required!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">Cluster:</label>
+                    </div>
+                    <div class="col-sm-6">
+						<input type="text" class="form-control n-inputfield" [(ngModel)]="addResource.cluster" required name="cs" id="cs" #cs="ngModel" 
+						[disabled]="addResource.datacenter == ''">
+                        <a class="form-control-feedback">
+                        <span class="icon icon-mandatory"></span></a>
+                        <div *ngIf="cs.errors && (cs.dirty || cs.touched)" class="custom-error">
+                            <div [hidden]="!cs.errors.required">
+                                <span class="icon icon-error"></span>
+								Cluster is required!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">Domain:</label>
+                    </div>
+                    <div class="col-sm-6">
+						<input type="text" class="form-control n-inputfield" [(ngModel)]="addResource.domain" required id="dn" name="dn" #dn="ngModel"
+                        [disabled]="addResource.datacenter == ''">
+                        <a class="form-control-feedback">
+                        <span class="icon icon-mandatory"></span></a>
+                        <div *ngIf="dn.errors && (dn.dirty || dn.touched)" class="custom-error">
+                            <div [hidden]="!dn.errors.required">
+                                <span class="icon icon-error"></span>
+								Domain is required!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">Network:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control n-inputfield" [(ngModel)]="addResource.network" required id="nw" name="nw" #nw="ngModel" 
+						[disabled]="addResource.datacenter == ''">
+                        <a class="form-control-feedback">
+                        <span class="icon icon-mandatory"></span></a>
+                        <div *ngIf="nw.errors && (nw.dirty || nw.touched)" class="custom-error">
+                            <div [hidden]="!nw.errors.required">
+                                <span class="icon icon-error"></span>
+                                Network is required!
+                            </div>
+                         </div>
+                    </div>
+                </div>
+				<div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">NetGMRE:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control n-inputfield" [(ngModel)]="addResource.netgmre" required id="ngmre" name="ngmre" #ngmre="ngModel"
+						[disabled]="addResource.datacenter == ''">
+                        <a class="form-control-feedback">
+                        <span class="icon icon-mandatory"></span></a>
+                        <div *ngIf="ngmre.errors && (ngmre.dirty || ngmre.touched)" class="custom-error">
+                            <div [hidden]="!ngmre.errors.required">
+                                <span class="icon icon-error"></span>
+                                NetGMRE is required!
+                            </div>
+                         </div>
+                    </div>
+                </div>
+				<div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">NetOAMP:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control n-inputfield" [(ngModel)]="addResource.netoamp" required id="noamp" name="noamp" #noamp="ngModel" 
+						[disabled]="addResource.datacenter == ''">
+                        <a class="form-control-feedback">
+                        <span class="icon icon-mandatory"></span></a>
+                        <div *ngIf="noamp.errors && (noamp.dirty || noamp.touched)" class="custom-error">
+                            <div [hidden]="!noamp.errors.required">
+                                <span class="icon icon-error"></span>
+                                NetOAMP is required!
+                            </div>
+                         </div>
+                    </div>
+                </div>
+				<div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">NetE1:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control n-inputfield" [(ngModel)]="addResource.nete1" required id="ne1" name="ne1" #ne1="ngModel" 
+						[disabled]="addResource.datacenter == ''">
+                        <a class="form-control-feedback">
+                        <span class="icon icon-mandatory"></span></a>
+                        <div *ngIf="ne1.errors && (ne1.dirty || ne1.touched)" class="custom-error">
+                            <div [hidden]="!ne1.errors.required">
+                                <span class="icon icon-error"></span>
+                                NetE1 is required!
+                            </div>
+                         </div>
+                    </div>
+                </div>
+				<div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">NetE2:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control n-inputfield" [(ngModel)]="addResource.nete2" required id="ne2" name="ne2" #ne2="ngModel" 
+						[disabled]="addResource.datacenter == ''">
+                        <a class="form-control-feedback">
+                        <span class="icon icon-mandatory"></span></a>
+                        <div *ngIf="ne2.errors && (ne2.dirty || ne2.touched)" class="custom-error">
+                            <div [hidden]="!ne2.errors.required">
+                                <span class="icon icon-error"></span>
+                                NetE2 is required!
+                            </div>
+                         </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-standard" type="submit" name="submit" [disabled]="!addresource.form.valid">Save</button>
+				<button class="btn btn-standard" data-dismiss="modal" (click)="onAddCancel()">Cancel</button>
+			</div>
+			</form>
+        </div>
+    </div>
+</div>
+<div class="modal active" id="editresource" role="dialog" aria-labelledby="modal-title-active" aria-hidden="true" tabindex='-1' data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="n-dialog-header-fg-filler">
+			<h1 class="modal-title-active">Edit Resource Configuration - {{currentrc.name}}</h1>
+                </div>
+                <div class="n-dialog-header-bg-filler"></div>
+                <div class="n-dialog-header-curve">
+                    <div class="fg-mask"></div>
+                    <div class="bg-mask"></div>
+                    <div class="fg-corner"></div>
+                    <div class="bg-corner"></div>
+                </div>
+                <i role="button" class="icon icon-close-rounded" data-dismiss="modal" aria-label="Close dialog"></i>
+            </div>
+            <form #editresource="ngForm" (ngSubmit)="onEditConfirm()">
+            <div class="modal-body">
+                <div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">Server IP:</label>
+					</div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control n-inputfield" [(ngModel)]="currentrc.serverip" [disabled]="true" id="serverip" name="serverip"
+                        #serverip="ngModel">
+                    </div>
+                </div>
+                <div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">OVF Template:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <select required [(ngModel)]="currentrc.ovftemplate" name="ovf" id="ovf" #ovf="ngModel" class="addresourceselect">
+                            <option *ngFor="let ovftemplate of ovftemplates" [ngValue]="ovftemplate">{{ovftemplate.name}}</option>
+                        </select>
+                        <a class="form-control-feedback">
+                        <span class="icon icon-mandatory"></span></a>
+                            <div *ngIf="ovf.errors && (ovf.dirty || ovf.touched)" class="custom-error">
+                                <div [hidden]="!ovf.errors.required">
+                                    <span class="icon icon-error"></span>
+                                    OVF Template is required!
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">vCenter:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <select required [(ngModel)]="currentrc.vcenter" name="vc" id="vc" #vc="ngModel" (change)="onvCenterChange()" class="addresourceselect">
+                            <option *ngFor="let vcenters of vcenters" [ngValue]="vcenters" >{{vcenters.name}}</option>
+                        </select>
+                        <a class="form-control-feedback">
+                        <span class="icon icon-mandatory"></span></a>
+                        <div *ngIf="vc.errors && (vc.dirty || vc.touched)" class="custom-error">
+                            <div [hidden]="!vc.errors.required">
+                                <span class="icon icon-error"></span>
+                                vCenter is required!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">Data Center:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <select required [(ngModel)]="currentrc.datacenter" name="dc" id="dc" #dc="ngModel" [disabled]="currentrc.vcenter == ''"
+                            (change)="onDataStoreChange()" class="addresourceselect">
+                            <option *ngFor="let dcs of datacenters" [value]="dcs" >{{dcs}}</option>
+                        </select>
+                        <a class="form-control-feedback">
+                        <span class="icon icon-mandatory"></span></a>
+                        <div *ngIf="dc.errors && (dc.dirty || dc.touched)" class="custom-error">
+                            <div [hidden]="!dc.errors.required">
+                                <span class="icon icon-error"></span>
+                                DataCenter is required!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">Data Store:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <select required [(ngModel)]="currentrc.datastore" name="ds" id="ds" #ds="ngModel" [disabled]="currentrc.datacenter == ''"
+                        class="addresourceselect">
+                            <option *ngFor="let dst of datastores" [ngValue]="dst" >{{dst}}</option>
+                        </select>
+                        <a class="form-control-feedback">
+                        <span class="icon icon-mandatory"></span></a>
+                        <div *ngIf="ds.errors && (ds.dirty || ds.touched)" class="custom-error">
+                            <div [hidden]="!ds.errors.required">
+                                <span class="icon icon-error"></span>
+                                DataStore is required!
+							</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">Cluster:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control n-inputfield" [(ngModel)]="currentrc.cluster" required name="cs" id="cs" #cs="ngModel"
+                        [disabled]="currentrc.datacenter == ''">
+                        <a class="form-control-feedback">
+                        <span class="icon icon-mandatory"></span></a>
+                        <div *ngIf="cs.errors && (cs.dirty || cs.touched)" class="custom-error">
+                            <div [hidden]="!cs.errors.required">
+                                <span class="icon icon-error"></span>
+                                Cluster is required!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">Domain:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control n-inputfield" [(ngModel)]="currentrc.domain" required id="dn" name="dn" #dn="ngModel"
+                        [disabled]="currentrc.datacenter == ''">
+                        <a class="form-control-feedback">
+                        <span class="icon icon-mandatory"></span></a>
+                        <div *ngIf="dn.errors && (dn.dirty || dn.touched)" class="custom-error">
+                            <div [hidden]="!dn.errors.required">
+                                <span class="icon icon-error"></span>
+                                Domain is required!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">Network:</label>
+					</div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control n-inputfield" [(ngModel)]="currentrc.network" required id="nw" name="nw" #nw="ngModel"
+                        [disabled]="currentrc.datacenter == ''">
+                        <a class="form-control-feedback">
+                        <span class="icon icon-mandatory"></span></a>
+                        <div *ngIf="nw.errors && (nw.dirty || nw.touched)" class="custom-error">
+                            <div [hidden]="!nw.errors.required">
+                                <span class="icon icon-error"></span>
+                                Network is required!
+                            </div>
+                         </div>
+                    </div>
+                </div>
+                <div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">NetGMRE:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control n-inputfield" [(ngModel)]="currentrc.netgmre" required id="ngmre" name="ngmre" #ngmre="ngModel"
+                        [disabled]="currentrc.datacenter == ''">
+                        <a class="form-control-feedback">
+                        <span class="icon icon-mandatory"></span></a>
+                        <div *ngIf="ngmre.errors && (ngmre.dirty || ngmre.touched)" class="custom-error">
+                            <div [hidden]="!ngmre.errors.required">
+                                <span class="icon icon-error"></span>
+                                NetGMRE is required!
+                            </div>
+                         </div>
+                    </div>
+                </div>
+                <div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">NetOAMP:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control n-inputfield" [(ngModel)]="currentrc.netoamp" required id="noamp" name="noamp" #noamp="ngModel"
+                        [disabled]="currentrc.datacenter == ''">
+                        <a class="form-control-feedback">
+                        <span class="icon icon-mandatory"></span></a>
+                        <div *ngIf="noamp.errors && (noamp.dirty || noamp.touched)" class="custom-error">
+							<div [hidden]="!noamp.errors.required">
+                                <span class="icon icon-error"></span>
+                                NetOAMP is required!
+                            </div>
+                         </div>
+                    </div>
+                </div>
+                <div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">NetE1:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control n-inputfield" [(ngModel)]="currentrc.nete1" required id="ne1" name="ne1" #ne1="ngModel"
+                        [disabled]="currentrc.datacenter == ''">
+                        <a class="form-control-feedback">
+                        <span class="icon icon-mandatory"></span></a>
+                        <div *ngIf="ne1.errors && (ne1.dirty || ne1.touched)" class="custom-error">
+                            <div [hidden]="!ne1.errors.required">
+                                <span class="icon icon-error"></span>
+                                NetE1 is required!
+                            </div>
+                         </div>
+                    </div>
+                </div>
+                <div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">NetE2:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control n-inputfield" [(ngModel)]="currentrc.nete2" required id="ne2" name="ne2" #ne2="ngModel"
+                        [disabled]="currentrc.datacenter == ''">
+                        <a class="form-control-feedback">
+                        <span class="icon icon-mandatory"></span></a>
+                        <div *ngIf="ne2.errors && (ne2.dirty || ne2.touched)" class="custom-error">
+                            <div [hidden]="!ne2.errors.required">
+                                <span class="icon icon-error"></span>
+                                NetE2 is required!
+                            </div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-standard" type="submit" name="submit" [disabled]="!editresource.form.valid">Save</button>
+                <button class="btn btn-standard" data-dismiss="modal">Cancel</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="deleteresource" role="dialog" aria-labelledby="myModalDlgLabel-confirm" aria-hidden="true" tabindex='1' data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog n-dialog-confirm">
+    <div class="modal-content" >
+      <div class="modal-header">
+        <div class="n-dialog-header-fg-filler">
+          <h1 class="modal-title">Do you want to delete the Resource Configuration?</h1>
+        </div>
+        <div class="n-dialog-header-bg-filler"></div>
+        <div class="n-dialog-header-curve">
+          <div class="fg-mask"></div>
+          <div class="bg-mask"></div>
+          <div class="fg-corner"></div>
+          <div class="bg-corner"></div>
+        </div>
+        <i role="button" class="icon icon-close-rounded" data-dismiss="modal" aria-label="Close"  tabindex="3"></i>
+        <div style="clear: both"></div>
+        <div class="modal-title-confirm"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-standard" data-dismiss="modal" (click)="onDeleteConfirm()" tabindex="4">Delete {{deletename}}</button>
+        <button class="btn btn-standard btn-defaultBlue" data-dismiss="modal" tabindex="2" >Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="panel panel-shadow panel-blue-cap">
+	<div class="panel-heading">
+		<div>
+			<h1>{{pageHeading}}</h1>
+		</div>
+	</div>
+	<div class="panel-body panel-body-height-align">
+		<div class="panel-section tabel-panel-section">   
+			<div class="row toolbar">
+				<button id="btn-refresh" class="btn btn-icon" title="Refresh" (click)="onRefreshClick()">
+					<span class="icon icon-refresh"></span>
+				</button>
+				<button id="btn-add" class="btn btn-icon" title="Add" data-toggle="modal" data-target="#addresource">
+					<span class="icon jqx-icon-plus"></span>
+				</button>
+				<button id="btn-edit" class="btn btn-icon" title="Edit" [disabled]="editdeletedisable" data-toggle="modal" data-target="#editresource">
+					<span class="icon icon-edit" ></span>
+				</button>
+				<button id="btn-delete" class="btn btn-icon" title="Delete" [disabled]="editdeletedisable" data-toggle="modal" data-target="#deleteresource">
+					<span class="icon icon-delete"></span>
+				</button>
+			</div>
+			<div class="row formrow">
+				<div class="col-md-12" style="height: 100%;">
+					<div id="resourceDiv"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>

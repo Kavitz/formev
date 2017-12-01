@@ -1,0 +1,276 @@
+
+<div class="vr-app-container">
+  <div class="modal" id="deleteovf" role="dialog" aria-labelledby="myModalDlgLabel-confirm" aria-hidden="true" tabindex='1' data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog n-dialog-confirm">
+    <div class="modal-content" >
+      <div class="modal-header">
+        <div class="n-dialog-header-fg-filler">
+          <h1 class="modal-title">Do you want to delete the OVF?</h1>
+        </div>
+        <div class="n-dialog-header-bg-filler"></div>
+        <div class="n-dialog-header-curve">
+          <div class="fg-mask"></div>
+          <div class="bg-mask"></div>
+          <div class="fg-corner"></div>
+          <div class="bg-corner"></div>
+        </div>
+        <i role="button" class="icon icon-close-rounded" data-dismiss="modal" aria-label="Close"  tabindex="3"></i>
+        <div style="clear: both"></div>
+        <div class="modal-title-confirm"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-standard" data-dismiss="modal" (click)="onDeleteConfirm()" tabindex="4">Delete {{deletename}}</button>
+        <button class="btn btn-standard btn-defaultBlue" data-dismiss="modal" tabindex="2" >Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal active edit-ovf" id="editovf" role="dialog" aria-labelledby="modal-title-active" aria-hidden="true" tabindex='-1' data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="n-dialog-header-fg-filler">
+            <h1 class="modal-title-active">Edit OVF - {{currentOvfs.ovfname}}</h1>
+        </div>
+        <div class="n-dialog-header-bg-filler"></div>
+        <div class="n-dialog-header-curve">
+          <div class="fg-mask"></div>
+          <div class="bg-mask"></div>
+          <div class="fg-corner"></div>
+          <div class="bg-corner"></div>
+        </div>
+        <i role="button" class="icon icon-close-rounded" data-dismiss="modal" aria-label="Close dialog"></i> 
+      </div>
+      <div class="modal-body">
+          <div class="row formrow">
+              <div class="col-sm-6 attrlabel">
+                      <label class="control-label">Mount URL:</label>
+              </div>
+              <div class="col-sm-6">
+                 <input type="text" class="form-control n-inputfield" [(ngModel)]="currentOvfs.mounturl" name="nfsm"  style="width: 360px;">
+              </div>
+            </div>
+            <div class="row formrow">
+                <div class="col-sm-6 attrlabel">
+                    <label class="control-label">NE Build:</label>
+                </div>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control n-inputfield" [(ngModel)]="currentOvfs.build" name="nebuild">
+                </div>
+              </div>
+              <div class="row formrow">
+                  <div class="col-sm-6 attrlabel">
+                          <label class="control-label">Enable Valgrind:</label>
+                  </div>
+                  <div class="col-sm-6">
+                      <label class="n-checkbox" role="checkbox" aria-checked="false">
+                          <input type="checkbox" [(ngModel)]="currentOvfs.valgrind" name="valgrind">
+                          <span class="checkbox-value"></span>
+                      </label>
+                  </div>
+              </div>
+              <div class="row formrow">
+                  <div class="col-sm-6 attrlabel">
+                      <label class="control-label">Copy Locally:</label>
+                  </div>
+                  <div class="col-sm-6">
+                      <label class="n-checkbox" role="checkbox" aria-checked="false">
+                          <input type="checkbox" [(ngModel)]="currentOvfs.copylocally" name="locally">
+                          <span class="checkbox-value"></span>
+                      </label>
+                  </div>
+                </div>
+                <div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">Shelf Mode:</label>    
+                    </div>
+                    <div class="col-sm-6">
+                        <select [(ngModel)]="currentOvfs.shelfmode" name="shelfmode">
+                            <option value="Sonet">Sonet</option>
+                            <option value="SDH">SDH</option>
+                        </select>
+                    </div>
+                  </div>
+                  <div class="row formrow">
+                      <div class="col-sm-6 attrlabel">
+                          <label class="control-label">Master Shelf Type:</label>
+                      </div>
+                      <div class="col-sm-6">
+                          <select [(ngModel)]="currentOvfs.shelftype" name="mst">
+                              <option value="PSS32">PSS32</option>
+                              <option value="PSS16">PSS16</option>
+                              <option value="PSS16II">PSS16II</option>
+                              <option value="PSS24x">PSS24x</option>
+                              <option value="PSS8x">PSS8x</option>
+                              <option value="PSS8">PSS8</option>
+                              <option value="PSS4">PSS4</option>                        
+                          </select>
+                      </div>
+                  </div>
+          
+                    <div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">Auto Commission:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="n-checkbox" role="checkbox" aria-checked="false">
+                            <input type="checkbox" [(ngModel)]="currentOvfs.commission" name="autocommission">
+                            <span class="checkbox-value"></span>
+                        </label>
+                    </div>
+                  </div>
+                  <div class="row formrow">
+                      <div class="col-sm-6 attrlabel">
+                       <label class="control-label">LoopBack IP:</label>
+                      </div>
+                      <div class="col-sm-6">
+                          <input type="text" class="form-control n-inputfield" [(ngModel)]="currentOvfs.loopbackip" name="loopback">
+                      </div>
+                    </div>
+                    <div class="row formrow">
+                        <div class="col-sm-6 attrlabel">
+                            <label class="control-label">Node TID:</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control n-inputfield" [(ngModel)]="currentOvfs.nodetid" name="ntid">
+                      </div>
+                      </div>
+                      <div class="row formrow">
+                          <div class="col-sm-6 attrlabel">
+                              <label class="control-label">Sim Boot Level:</label>
+                          </div>
+                          <div class="col-sm-6">
+                              <select [(ngModel)]="currentOvfs.bootlevel" name="sbl">
+                                  <option>Clear</option>
+                                  <option>Load</option>
+                                  <option>Install</option>
+                                  <option>Drivers</option>
+                                  <option>Ready</option>
+                            
+                              </select>
+                           </div>
+                        </div> 
+            </div>
+      <div class="modal-footer">
+        <button class="btn btn-standard" data-dismiss="modal" (click)="onEditConfirm()" >Save</button>
+        <button class="btn btn-standard" data-dismiss="modal">Cancel</button>
+       </div>
+    </div>
+  </div>
+</div>
+<div class="modal active" id="addovf" role="dialog" aria-labelledby="modal-title-active" aria-hidden="true" tabindex='-1' data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="n-dialog-header-fg-filler">
+              <h1 class="modal-title-active">Add OVF</h1>
+          </div>
+          <div class="n-dialog-header-bg-filler"></div>
+          <div class="n-dialog-header-curve">
+            <div class="fg-mask"></div>
+            <div class="bg-mask"></div>
+            <div class="fg-corner"></div>
+            <div class="bg-corner"></div>
+          </div>
+          <i role="button" class="icon icon-close-rounded" data-dismiss="modal" aria-label="Close dialog" (click)="onAddCancel()"></i> 
+        </div>
+	<form #addovf="ngForm" (ngSubmit)="onAddConfirm($event)">
+        <div class="modal-body">
+            <div class="row formrow">
+                <div class="col-sm-6 attrlabel">
+                    <label class="control-label">Name:</label>
+                </div>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control n-inputfield" required id="name" [(ngModel)]="addOvfs.name" name="name" #name="ngModel">
+                    <a class="form-control-feedback">
+                      <span class="icon icon-mandatory"></span></a>
+                      <div *ngIf="name.errors && (name.dirty || name.touched)" class="custom-error">
+                          <div [hidden]="!name.errors.required">
+                              <span class="icon icon-error"></span>                                
+                              Name is required!
+                          </div>
+                      </div>  
+                </div>
+              </div>
+              <div class="row formrow">
+                <div class="col-sm-6 attrlabel">
+                  <label class="control-label">URL:</label>
+                </div>
+                <div class="col-sm-6">
+                  <input type="text" class="form-control n-inputfield" required id="url" [(ngModel)]="addOvfs.url"  name="url" #url="ngModel" >
+                  <a class="form-control-feedback">
+                    <span class="icon icon-mandatory"></span></a>
+                    <div *ngIf="url.errors && (url.dirty || url.touched)" class="custom-error">
+                        <div [hidden]="!url.errors.required">
+                            <span class="icon icon-error"></span>                                
+                            URL is required!
+                        </div>
+                    </div>
+                </div>
+              </div>
+              </div>
+       <div class="modal-footer">
+	  <button class="btn btn-standard" name="submit" [disabled]="!addovf.form.valid">Add</button>
+          <button class="btn btn-standard" data-dismiss="modal" (click)="onAddCancel()">Cancel</button>
+         </div>
+	 </form>
+      </div>
+    </div>
+  </div>
+<div class="modal" id="ErrorDialog" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" tabindex='-1'>
+<div class="modal-dialog n-dialog-critical">
+  <div class="modal-content" id="TA-dialog-error-content">
+    <div class="modal-header" id="TA-dialog-error-content-header">
+      <div class="n-dialog-header-fg-filler">
+              <h1 class="modal-title" id="myModalLabel"><span class="icon icon-error"></span>{{errorheading}}</h1>
+      </div>
+      <div class="n-dialog-header-bg-filler"></div>
+        <!-- -->
+      <div class="n-dialog-header-curve">
+          <div class="fg-mask"></div>
+          <div class="bg-mask"></div>
+          <div class="fg-corner"></div>
+          <div class="bg-corner"></div>
+      </div>
+      <i role="button" class="icon icon-close-rounded" data-dismiss="modal" aria-label="Close" tabindex="4" id="TA-dialog-error-content-close"></i>
+      <div style="clear: both"></div>
+      <div class="modal-title-error-warning" id="myModalLabelInstruction">{{errorMessage}}</div>
+    </div>
+    <div class="modal-footer" id="TA-dialog-error-footer">
+      <button class="btn btn-standard" data-dismiss="modal" tabindex="3" id="TA-dialog-error-buttons-cancel">OK</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="panel panel-shadow panel-blue-cap">
+  <div class="panel-heading">
+    <div>
+      <h1>{{pageHeading}}</h1>
+    </div>
+  </div>
+  <div class="panel-body panel-body-height-align">
+    <div class="panel-section">   
+      <div class="row toolbar">
+        <button id="btn-refresh" class="btn btn-icon" title="Refresh" (click)="onRefreshClick()">
+          <span class="icon icon-refresh"></span>
+        </button>
+        <button id="btn-add" class="btn btn-icon" title="Add" data-toggle="modal" data-target="#addovf">
+          <span class="icon jqx-icon-plus"></span>
+        </button>
+        <button id="btn-edit" class="btn btn-icon" title="Edit" [disabled]="editdeletedisable" data-toggle="modal" data-target="#editovf">
+          <span class="icon icon-edit" ></span>
+        </button>
+        <button id="btn-delete" class="btn btn-icon" title="Delete" [disabled]="editdeletedisable" data-toggle="modal" data-target="#deleteovf">
+          <span class="icon icon-delete"></span>
+        </button>
+      </div>
+      <div class="row formrow">
+        <div class="col-md-12" style="height: 100%;">
+        <div id="myDiv"></div>
+      </div>
+    </div>
+  </div>
+  
+</div>
+</div>

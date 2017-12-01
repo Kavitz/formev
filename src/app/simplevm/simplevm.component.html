@@ -1,304 +1,341 @@
-<form #simpleVMForm="ngForm" (ngSubmit)="deployVM($event)">
-	<div class="modal" id="ConfirmationDialog" role="dialog" aria-labelledby="myModalDlgLabel-confirm" aria-hidden="true" tabindex='1'>
-    <div class="modal-dialog n-dialog-confirm">
-        <div class="modal-content" >
-            <div class="modal-header">
-                <div class="n-dialog-header-fg-filler">
-                    <h1 class="modal-title">Deployment</h1>
-                </div>
-                <div class="n-dialog-header-bg-filler"></div>
-                <div class="n-dialog-header-curve">
-                    <div class="fg-mask"></div>
-                    <div class="bg-mask"></div>
-                    <div class="fg-corner"></div>
-                    <div class="bg-corner"></div>
-                </div>
-                <i role="button" class="icon icon-close-rounded" data-dismiss="modal" aria-label="Close"  tabindex="3"></i>
-                <div style="clear: both"></div>
-                <div class="modal-title-confirm">Deployment has started, please check the logs for more information.</div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-standard btn-defaultBlue" data-dismiss="modal" tabindex="2">Ok</button>
-            </div>
-        </div>
-    </div>
-	</div>
-    <div class="panel panel-slide-vertical panel-shadow panel-blue-cap simplevmpanel">
-        <div class="panel-heading" role="button" tabindex="0">
-            <h1>
-                <div class="panel-arrow">
-                    <span class="icon"></span>
-                    <label>Deploy</label>
-                </div>
-            </h1>
-        </div>
-        <div class="panel-body">             
-            <div class="row formrow">
-                <div class="col-sm-6 attrlabel">
-                    <label class="control-label">Resource Configuration:</label>
-                </div>
-                <div class="col-sm-6">
-                    <select required type="number" [(ngModel)]="resourceconfig" name="rc" id="rc" #rc="ngModel">
-                        <option *ngFor="let resourceconfig of resourceconfiguration" [ngValue]="resourceconfig">{{resourceconfig}}</option>
-                    </select>
-                    <a class="form-control-feedback">
-                        <span class="icon icon-mandatory"></span></a>
-                    <div *ngIf="rc.errors && (rc.dirty || rc.touched)" class="custom-error">
-                        <div [hidden]="!rc.errors.required">
-                            <span class="icon icon-error"></span>                                
-                            Please select Resource Configuration.
-                        </div>        
+<div class="vr-app-container-deploy">
+    <form #simpleVMForm="ngForm">
+        <div class="modal" id="ConfirmationDialog" role="dialog" aria-labelledby="myModalDlgLabel-confirm" aria-hidden="true" tabindex='1'>
+            <div class="modal-dialog n-dialog-confirm">
+                <div class="modal-content" >
+                    <div class="modal-header">
+                        <div class="n-dialog-header-fg-filler">
+                            <h1 class="modal-title">Deployment</h1>
+                        </div>
+                        <div class="n-dialog-header-bg-filler"></div>
+                        <div class="n-dialog-header-curve">
+                            <div class="fg-mask"></div>
+                            <div class="bg-mask"></div>
+                            <div class="fg-corner"></div>
+                            <div class="bg-corner"></div>
+                        </div>
+                        <i role="button" class="icon icon-close-rounded" data-dismiss="modal" aria-label="Close"  tabindex="3"></i>
+                        <div style="clear: both"></div>
+                        <div class="modal-title-confirm">Deployment has started, please check the logs for more information.</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-standard btn-defaultBlue" data-dismiss="modal" tabindex="2">Ok</button>
                     </div>
                 </div>
             </div>
-            <div class="row formrow">
-                <div class="col-sm-6 attrlabel">
-                    <label class="control-label">VM Folder:</label>
-                </div>
-                <div class="col-sm-6">
-                    <select [(ngModel)]="folderlocation" [disabled]="true" name="folder"></select>
-                </div>
-            </div>  
-            <div class="row formrow">
-                <div class="col-sm-6 attrlabel">
-                    <label class="control-label">VM Name:</label>
-                </div>
-                <div class="col-sm-6">
-                    <input type="text" required class="form-control n-inputfield" [disabled]="resourceconfig == ''" [(ngModel)]="vmname" name="vname" id="vname" #vname="ngModel">
-                    <a class="form-control-feedback">
+        </div>
+        
+        <div class="panel panel-shadow panel-blue-cap simplevmpanel">
+            <div class="panel-heading" role="button" tabindex="0">
+                <h1>
+                    <div class="panel-arrow">
+                        <span class="icon"></span>
+                        <label>Deploy</label>
+                    </div>
+                </h1>
+            </div>
+            <div class="panel-body">             
+                <div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">Resource Configuration:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <select required type="number" [(ngModel)]="resourceconfig" name="rc" id="rc" #rc="ngModel" (change)="getVMProperties()">
+                            <option *ngFor="let resourceconfig of resourceconfiguration" [ngValue]="resourceconfig">{{resourceconfig}}</option>
+                        </select>
+                        <a class="form-control-feedback">
                         <span class="icon icon-mandatory"></span></a>
-                    <div *ngIf="vname.errors && (vname.dirty || vname.touched)" class="custom-error">
-                        <div [hidden]="!vname.errors.required">
-                            <span class="icon icon-error"></span>                                
-                            VM Name is required!
-                        </div>        
+                        <div *ngIf="rc.errors && (rc.dirty || rc.touched)" class="custom-error">
+                            <div [hidden]="!rc.errors.required">
+                                <span class="icon icon-error"></span>                                
+                                Please select Resource Configuration.
+                            </div>        
+                        </div>
                     </div>
                 </div>
-                </div>
-            <div class="row formrow">               
-                <div class="col-sm-6 attrlabel">
-                    <label class="control-label">eth0 IP:</label>                 
-                </div>
-                <div class="col-sm-6">
-                    <input type="text" required class="form-control n-inputfield" [disabled]="resourceconfig == ''" [(ngModel)]="ipaddresss" name="ipaddress"  id="ipaddress" #ipaddress="ngModel">
-                    <a class="form-control-feedback">
+                <div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">VM Folder:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <select [(ngModel)]="folderlocation" [disabled]="true" name="folder"></select>
+                    </div>
+                </div>  
+                <div class="row formrow">
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">VM Name:</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" required class="form-control n-inputfield" [disabled]="resourceconfig == ''" [(ngModel)]="vmname" name="vname" id="vname" #vname="ngModel" (change)="setEnable()">
+                        <a class="form-control-feedback">
                             <span class="icon icon-mandatory"></span></a>
-                    <div *ngIf="ipaddress.errors && (ipaddress.dirty || ipaddress.touched)" class="custom-error">
-                           
-                        <div [hidden]="!ipaddress.errors.required">
-                            <span class="icon icon-error"></span>                                
-                            eth0 IP is required!
-                        </div>        
+                        <div *ngIf="vname.errors && (vname.dirty || vname.touched)" class="custom-error">
+                            <div [hidden]="!vname.errors.required">
+                                <span class="icon icon-error"></span>                                
+                                VM Name is required!
+                            </div>        
+                        </div>
                     </div>
                 </div>
-            </div>  
+                <div class="row formrow">               
+                    <div class="col-sm-6 attrlabel">
+                        <label class="control-label">eth0 IP:</label>                 
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" required class="form-control n-inputfield" [disabled]="resourceconfig == ''" [(ngModel)]="ipaddresss" name="ipaddress"  id="ipaddress" #ipaddress="ngModel" (change)="setEnable()">
+                        <a class="form-control-feedback">
+                        <span class="icon icon-mandatory"></span></a>
+                        <div *ngIf="ipaddress.errors && (ipaddress.dirty || ipaddress.touched)" class="custom-error">       
+                            <div [hidden]="!ipaddress.errors.required">
+                                <span class="icon icon-error"></span>                                
+                                eth0 IP is required!
+                            </div>        
+                        </div>
+                    </div>
+                </div>  
+            </div>
         </div>
-    </div>
-    
-    <div class="panel panel-slide-vertical panel-shadow panel-blue-cap simplevmpanel">
-        <div class="panel-heading n-panel-collapse" role="button" tabindex="0">
-            <h1>
-                <div class="panel-arrow">
-                    <span class="icon"></span>
-                    <label>Node Properties</label>
+
+        <div class="row"> 
+            <div class="col-lg-4">
+                <div class="panel panel-slide-vertical panel-shadow panel-blue-cap blockexpand">
+                    <div class="panel-heading n-panel-collapse" role="button" tabindex="0">
+                        <h1>
+                            <div class="panel-arrow">
+                                <span class="icon"></span>
+                                <label>Node Properties</label>
+                            </div>
+                        </h1>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row formrow">
+                            <div class="col-sm-6 attrlabel">
+                                <label class="control-label">Mount URL:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control n-inputfield" 
+                                [(ngModel)]="nfsmount" name="nfsm" [disabled]="disablenode">
+                            </div>
+                        </div>
+                        <div class="row formrow">
+                            <div class="col-sm-6 attrlabel">
+                                <label class="control-label">NE Build:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control n-inputfield" [(ngModel)]="nebuild" name="build" [disabled]="disablenode">
+                            </div>
+                        </div>
+						<div class="row formrow">
+                            <div class="col-sm-6 attrlabel">
+                                <label class="control-label">Node TID:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control n-inputfield" [(ngModel)]="nodetid" name="nodetid" [disabled]="disablenode">
+                            </div>
+                        </div>
+						<div class="row formrow">
+                            <div class="col-sm-6 attrlabel">
+                                <label class="control-label">Shelf Mode:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <select [(ngModel)]="shelfmode" name="shelfmode" [disabled]="disablenode">
+                                    <option value="Sonet">Sonet</option>
+                                    <option value="SDH">SDH</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row formrow">
+                            <div class="col-sm-6 attrlabel">
+                                <label class="control-label">Master Shelf Type:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <select [(ngModel)]="mastershelf" name="mst" [disabled]="disablenode">
+                                    <option value="PSS32">PSS32</option>
+                                    <option value="PSS16">PSS16</option>
+                                    <option value="PSS16II">PSS16II</option>
+                                    <option value="PSS24x">PSS24x</option>
+                                    <option value="PSS8x">PSS8x</option>
+                                    <option value="PSS8">PSS8</option>
+                                    <option value="PSS4">PSS4</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row formrow formrowcheck">
+                            <div class="col-sm-6 attrlabel">
+                                <label class="control-label">Enable Valgrind:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="n-checkbox" role="checkbox" aria-checked="false">
+                                    <input type="checkbox" [(ngModel)]="enablevalgrind" name="valgrind" [disabled]="disablenode">
+                                    <span class="checkbox-value"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row formrow formrowcheck">
+                            <div class="col-sm-6 attrlabel">
+                                <label class="control-label">Copy Locally:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="n-checkbox" role="checkbox" aria-checked="false">
+                                <input type="checkbox" [(ngModel)]="copylocally" name="locally" [disabled]="disablenode">
+                                <span class="checkbox-value"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row formrow formrowcheck">
+                            <div class="col-sm-6 attrlabel">
+                                <label class="control-label">Auto Commission:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="n-checkbox" role="checkbox" aria-checked="false">
+                                    <input type="checkbox" [(ngModel)]="autocommission" name="autocommission" [disabled]="disablenode">
+                                    <span class="checkbox-value"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row formrow">
+                            <div class="col-sm-6 attrlabel">
+                                <label class="control-label">LoopBack IP:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control n-inputfield" [(ngModel)]="loopbackip" name="loopback" [disabled]="disablenode">
+                            </div>
+                        </div> 
+                        <div class="row formrow">
+                            <div class="col-sm-6 attrlabel">
+                                <label class="control-label">Sim Boot Level:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <select [(ngModel)]="simbootlevel" name="sbl" [disabled]="disablenode">
+                                    <option>Clear</option>
+                                    <option>Load</option>
+                                    <option>Install</option>
+                                    <option>Drivers</option>
+                                    <option>Ready</option>
+                                </select>
+                            </div>
+                        </div>                         
+                    </div>
                 </div>
-            </h1>
+            </div>
+            <div class="col-lg-4">
+                <div class="panel panel-slide-vertical panel-shadow panel-blue-cap blockexpand">
+                    <div class="panel-heading n-panel-collapse" role="button" tabindex="0">
+                        <h1>
+                            <div class="panel-arrow">
+                                <span class="icon"></span>
+                                <label>GMPLS Routing Engine</label>
+                            </div>
+                        </h1>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row formrow formrowcheck">
+                            <div class="col-sm-6 attrlabel">
+                                <label class="control-label">Enable GMRE:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="n-checkbox" role="checkbox" aria-checked="false">
+                                    <input type="checkbox" [(ngModel)]="enablegmre" name="enablegmre" [disabled]="disablenode">
+                                    <span class="checkbox-value"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row formrow">
+                            <div class="col-sm-6 attrlabel">
+                                <label class="control-label">GMRE Build: </label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control n-inputfield" [(ngModel)]="gmrebuild" name="gbuild" [disabled]="disablenode || !enablegmre">
+                            </div>
+                        </div>
+                        <div class="row formrow">
+                            <div class="col-sm-6 attrlabel">
+                                <label class="control-label">GMRE Load URL:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control n-inputfield" [(ngModel)]="gmreloadurl" name="gloadurl" [disabled]="disablenode || !enablegmre">
+                            </div>
+                        </div>
+                        <div class="row formrow">
+                            <div class="col-sm-6 attrlabel">
+                                <label class="control-label">Node IP:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control n-inputfield" [(ngModel)]="nodeip" name="nip" [disabled]="disablenode || !enablegmre">
+                            </div>
+                        </div> 
+                        <div class="row formrow">
+                            <div class="col-sm-6 attrlabel">
+                                <label class="control-label">Notify IP:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control n-inputfield" [(ngModel)]="notifyip" name="notiip" [disabled]="disablenode || !enablegmre">
+                            </div>
+                        </div>         
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="panel panel-slide-vertical panel-shadow panel-blue-cap blockexpand">
+                    <div class="panel-heading n-panel-collapse" role="button" tabindex="0">
+                        <h1>
+                            <div class="panel-arrow">
+                                <span class="icon"></span>
+                                <label>Virtual Machine Settings</label>
+                            </div>
+                        </h1>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row formrow">
+                            <div class="col-sm-6 attrlabel">
+                                <label class="control-label">VM Disk Mode:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <select [(ngModel)]="vmdiskmode" name="vmdmode" [disabled]="disablenode">
+                                    <option value="thinprovision">Thin Provision</option>
+                                    <option value="lazyzero">Thin Provision Lazy Zeroed</option>
+                                    <option value="eagerzero">Thin Provision Eager Zeroed</option>
+                                </select>
+                            </div>
+                        </div>   
+						<div class="row formrow">
+                            <div class="col-sm-6 attrlabel">
+                                <label class="control-label">RAM Size:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row"style="padding-left: 17px;">
+                                 <div class="col-sm-6">
+                                <input type="number" min="1" max="1000" class="form-control n-inputfield" [(ngModel)]="ramsize" name="rams" [disabled]="disablenode">
+                                </div>
+                                 <div class="col-sm-6">
+                                <select [(ngModel)]="ramunit" name="unit" [disabled]="disablenode">
+                                    <option value="gb">GB</option>
+                                    <option value="mb">MB</option>
+                                </select>
+                                </div>
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="row formrow">
+                            <div class="col-sm-6 attrlabel">
+                                <label class="control-label">Number of Cores:</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="number" min="1" max="1000" class="form-control n-inputfield" [(ngModel)]="nocores" name="cores" [disabled]="disablenode">
+                            </div>
+                        </div>	
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="panel-body">
-            <div class="row formrow">
-                <div class="col-sm-6 attrlabel">
-                        <label class="control-label">NFS Mount URL:</label>
-                </div>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control n-inputfield" 
-                    [(ngModel)]="nfsmount" name="nfsm" style="width: 385px;">
-                </div>
+
+        <div class="row control-div">
+            <div class="col-sm-12" style="padding-right: 30px;">
+               
+                <button class="btn btn-standard" name="refresh" (click)="refreshPage()">Refresh</button>
+                <button class="btn btn-standard" name="submit" [disabled]="!simpleVMForm.form.valid" (click)="deployVM()">Deploy</button>
             </div>
-            <div class="row formrow">
-                <div class="col-sm-6 attrlabel">
-                    <label class="control-label">NE Build:</label>
-                </div>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control n-inputfield" [(ngModel)]="nebuild" name="build">
-                </div>
-            </div>
-            <div class="row formrow">
-                <div class="col-sm-6 attrlabel">
-                        <label class="control-label">Enable Valgrind:</label>
-                </div>
-                <div class="col-sm-6">
-                    <label class="n-checkbox" role="checkbox" aria-checked="false">
-                        <input type="checkbox" [(ngModel)]="enablevalgrind" name="valgrind">
-                        <span class="checkbox-value"></span>
-                    </label>
-                </div>
-            </div>
-            <div class="row formrow">
-                <div class="col-sm-6 attrlabel">
-                    <label class="control-label">Copy Locally:</label>
-                </div>
-                <div class="col-sm-6">
-                    <label class="n-checkbox" role="checkbox" aria-checked="false">
-                        <input type="checkbox" [(ngModel)]="copylocally" name="locally">
-                        <span class="checkbox-value"></span>
-                    </label>
-                </div>
-            </div>
-            <div class="row formrow">
-                <div class="col-sm-6 attrlabel">
-                    <label class="control-label">Shelf Mode:</label>    
-                </div>
-                <div class="col-sm-6">
-                    <select [(ngModel)]="shelfmode" name="shelfmode">
-                        <option value="Sonet">Sonet</option>
-                        <option value="SDH">SDH</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row formrow">
-                <div class="col-sm-6 attrlabel">
-                    <label class="control-label">Master Shlef Type:</label>
-                </div>
-                <div class="col-sm-6">
-                    <select [(ngModel)]="mastershelf" name="mst">
-                        <option value="PSS32">PSS32</option>
-                        <option value="PSS16">PSS16</option>
-                        <option value="PSS16II">PSS16II</option>
-                        <option value="PSS24x">PSS24x</option>
-                        <option value="PSS8x">PSS8x</option>
-                        <option value="PSS8">PSS8</option>
-                        <option value="PSS4">PSS4</option>                        
-                    </select>
-                </div>
-            </div>
-                            
-            <div class="row formrow">
-                <div class="col-sm-6 attrlabel">
-                    <label class="control-label">Auto Commission:</label>
-                </div>
-                <div class="col-sm-6">
-                    <label class="n-checkbox" role="checkbox" aria-checked="false">
-                        <input type="checkbox" [(ngModel)]="autocommission" name="autocommission">
-                        <span class="checkbox-value"></span>
-                    </label>
-                </div>
-            </div>
-            <div class="row formrow">
-                <div class="col-sm-6 attrlabel">
-                 <label class="control-label">LoopBack IP:</label>
-                </div>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control n-inputfield" [(ngModel)]="loopbackip" name="loopback">
-                </div>
-            </div> 
-            <div class="row formrow">
-                <div class="col-sm-6 attrlabel">
-                    <label class="control-label">Node TID:</label>
-                </div>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control n-inputfield" [(ngModel)]="nodetid" name="nodetid">
-                </div>
-            </div> 
-            <div class="row formrow">
-                <div class="col-sm-6 attrlabel">
-                    <label class="control-label">Sim Boot Level:</label>
-                </div>
-                <div class="col-sm-6">
-                    <select [(ngModel)]="simbootlevel" name="sbl">
-                        <option>Clear</option>
-                        <option>Load</option>
-                        <option>Install</option>
-                        <option>Drivers</option>
-                        <option>Ready</option>
-                    </select>
-                 </div>
-            </div>                         
         </div>
-    </div>
-    <div class="panel panel-slide-vertical panel-shadow panel-blue-cap simplevmpanel">
-        <div class="panel-heading n-panel-collapse" role="button" tabindex="0">
-            <h1>
-                <div class="panel-arrow">
-                    <span class="icon"></span>
-                    <label>GMPLS Routing Engine</label>
-                </div>
-            </h1>
-        </div>
-        <div class="panel-body">
-            <div class="row formrow">
-                <div class="col-sm-6 attrlabel">
-                    <label class="control-label">Enable GMRE:</label>
-                </div>
-                <div class="col-sm-6">
-                    <label class="n-checkbox" role="checkbox" aria-checked="false">
-                        <input type="checkbox" [(ngModel)]="enablegmre" name="enablegmre">
-                        <span class="checkbox-value"></span>
-                    </label>
-                </div>
-            </div>
-            <div class="row formrow">
-                <div class="col-sm-6 attrlabel">
-                    <label class="control-label">GMRE Build: </label>
-                </div>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control n-inputfield" [(ngModel)]="gmrebuild" name="gbuild">
-                </div>
-            </div>
-            <div class="row formrow">
-                <div class="col-sm-6 attrlabel">
-                    <label class="control-label">GMRE Load URL:</label>
-                </div>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control n-inputfield" [(ngModel)]="gmreloadurl" name="gloadurl">
-                </div>
-            </div>
-            <div class="row formrow">
-                <div class="col-sm-6 attrlabel">
-                    <label class="control-label">Node IP:</label>
-                </div>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control n-inputfield" [(ngModel)]="nodeip" name="nip">
-                </div>
-            </div> 
-            <div class="row formrow">
-                <div class="col-sm-6 attrlabel">
-                    <label class="control-label">Notify IP:</label>
-                </div>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control n-inputfield" [(ngModel)]="notifyip" name="notiip">
-                </div>
-            </div>         
-        </div>
-    </div>
-    <div class="panel panel-slide-vertical panel-shadow panel-blue-cap simplevmpanel">
-        <div class="panel-heading n-panel-collapse" role="button" tabindex="0">
-            <h1>
-                <div class="panel-arrow">
-                    <span class="icon"></span>
-                    <label>Virtual Machine Settings</label>
-                </div>
-            </h1>
-        </div>
-        <div class="panel-body">
-            <div class="row formrow">
-                <div class="col-sm-6 attrlabel">
-                    <label class="control-label">VM Disk Mode:</label>
-                </div>
-                <div class="col-sm-6">
-                    <select [(ngModel)]="vmdiskmode" name="vmdmode">
-                        <option>Thin Provision</option>
-                        <option>Thin Provision Lazy Zeroed</option>
-                        <option>Thin Provision Eager Zeroed</option>
-                    </select>
-                </div>
-            </div>
-            
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12 control-div">
-            <button class="btn btn-standard" name="refresh" (click)="refreshPage()">Refresh</button>
-	    <button class="btn btn-standard" name="submit" [disabled]="!simpleVMForm.form.valid">Deploy</button>
-        </div>
-    </div>
-</form>
+        
+    </form>
+</div>

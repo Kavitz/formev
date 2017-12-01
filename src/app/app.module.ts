@@ -25,12 +25,18 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 
 import { VcenterService } from './vcenter/vcenter.service';
+import { OvfsService } from './ovfs/ovfs.service';
+import { ResourceConfigService } from './resourceconfig/resourceconfig.service';
 import { SimpleVMService } from './simplevm/simplevm.service';
+import { LogService } from './logs/logs.service';
 import { BannerComponent } from './banner/banner.component';
 import { FooterComponent } from './footer/footer.component';
 import { VcenterComponent } from './vcenter/vcenter.component';
+import { OvfsComponent } from './ovfs/ovfs.component';
 import { SimplevmComponent } from './simplevm/simplevm.component';
 import { ProgressComponent } from './progress/progress.component';
+import { LogComponent } from './logs/logs.component';
+import { ResourceConfigComponent } from './resourceconfig/resourceconfig.component';
 import { AppRoutingModule } from './app-routes.module';
 
 // Application wide providers
@@ -54,9 +60,12 @@ type StoreType = {
     AppComponent,
     BannerComponent,
     FooterComponent,
+    ResourceConfigComponent,
     VcenterComponent,
+    OvfsComponent,
     SimplevmComponent,
-    ProgressComponent
+    ProgressComponent,
+    LogComponent
   ],
   /**
    * Import Angular's modules.
@@ -79,7 +88,10 @@ type StoreType = {
     ENV_PROVIDERS,
     APP_PROVIDERS,
     VcenterService,
-    SimpleVMService
+    ResourceConfigService,
+    SimpleVMService,
+    OvfsService,
+    LogService
   ]
 })
 export class AppModule {

@@ -13,10 +13,11 @@ export class VcenterService{
             .map(res => res.json());
     }
     getVcenter(){
-        return this.http.get('api/vcenter')
+		return this.http.get('api/vcenter/'+Math.floor(Math.random()*1000001))
             .map(res => res.json());
     }
     addVcenter(newValue :any){
+    	console.log("newValue --",newValue);
         return this.http.post('api/vcenter', newValue)
         .map(res => res.json());
     }

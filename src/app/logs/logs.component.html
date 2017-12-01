@@ -1,0 +1,21 @@
+<div class="vr-app-container">
+	<div class="panel panel-shadow panel-blue-cap">
+    	<div class="panel-heading">
+	    	<div>
+		        <h1>{{pageHeading}}</h1>
+		     </div>
+    	</div>
+    	<div class="panel-body panel-body-height-align">
+	 		<div class="row toolbar">
+          		<button id="btn-refresh" class="btn btn-icon" title="Refresh" (click)="onRefreshClick()">
+            		<span class="icon icon-refresh"></span>
+          		</button>
+    		</div>
+	 		<div class="row formrow">
+          		<div class="col-md-12" style="height: 100%;">
+					{{logMessage}}
+		  		</div>
+    		</div>
+		</div>
+	</div>
+</div>

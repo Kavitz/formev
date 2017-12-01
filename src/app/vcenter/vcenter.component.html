@@ -1,9 +1,10 @@
-  <div class="modal" id="deletevc" role="dialog" aria-labelledby="myModalDlgLabel-confirm" aria-hidden="true" tabindex='1' data-backdrop="static" data-keyboard="false">
+<div class="vr-app-container">
+<div class="modal" id="deletevc" role="dialog" aria-labelledby="myModalDlgLabel-confirm" aria-hidden="true" tabindex='1' data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog n-dialog-confirm">
       <div class="modal-content" >
         <div class="modal-header">
           <div class="n-dialog-header-fg-filler">
-            <h1 class="modal-title">Do you want to delete the vcenter?</h1>
+            <h1 class="modal-title">Do you want to delete the vCenter?</h1>
           </div>
           <div class="n-dialog-header-bg-filler"></div>
           <div class="n-dialog-header-curve">
@@ -37,7 +38,7 @@
             <div class="fg-corner"></div>
             <div class="bg-corner"></div>
           </div>
-          <i role="button" class="icon icon-close-rounded" data-dismiss="modal" aria-label="Close dialog"></i> 
+          <i role="button" class="icon icon-close-rounded" data-dismiss="modal" aria-label="Close dialog" (click)="onEditCancel()"></i> 
         </div>
         <form #editvc="ngForm">
         <div class="modal-body">
@@ -59,7 +60,7 @@
           </div>
           <div class="row formrow">
             <div class="col-sm-6 attrlabel">
-              <label class="control-label">IP Address:</label>
+              <label class="control-label">IP Address/Host Name:</label>
             </div>
             <div class="col-sm-6">
               <input type="text" class="form-control n-inputfield" id="editipaddress" [(ngModel)]="currentVcenter.ipaddress" required name="editipaddress" #editipaddress="ngModel">
@@ -128,7 +129,7 @@
               <div class="fg-corner"></div>
               <div class="bg-corner"></div>
             </div>
-            <i role="button" class="icon icon-close-rounded" data-dismiss="modal" aria-label="Close dialog"></i> 
+            <i role="button" class="icon icon-close-rounded" data-dismiss="modal" aria-label="Close dialog" (click)="onAddCancel()"></i> 
           </div>
           <form #addvc="ngForm">
           <div class="modal-body">
@@ -200,7 +201,7 @@
           </div>
           <div class="modal-footer">
             <button class="btn btn-standard" (click)="onAddConfirm()" [disabled]="!addvc.form.valid">Save</button>
-            <button class="btn btn-standard" data-dismiss="modal">Cancel</button>
+            <button class="btn btn-standard" data-dismiss="modal" (click)="onAddCancel()">Cancel</button>
            </div>
           </form>
         </div>
@@ -280,3 +281,4 @@
     
   </div>
 
+</div>

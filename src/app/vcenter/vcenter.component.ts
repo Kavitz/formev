@@ -95,7 +95,7 @@ export class VcenterComponent implements AfterViewInit{
     (<any>$("#myDiv")).jqxGrid(
       {
         width: '100%',
-	height: 390,
+	      height: auto,
         source: dataAdapter1,
         editable: false,
         columnsResize: true, //columns resizable
@@ -171,7 +171,9 @@ export class VcenterComponent implements AfterViewInit{
     this.cleanup();
     $(".maskloader").hide();
   }
-
+  onAddCancel(){
+  	this.addVcenter={name: "", ipaddress: "", username: "", password: ""};
+  }
   onAddConfirm(){
     console.log(this.addVcenter.name);
     console.log(this.addVcenter.ipaddress);
@@ -199,7 +201,7 @@ export class VcenterComponent implements AfterViewInit{
 							if(logmsg.sqlMessage.indexOf("PRIMARY") != -1){
 								this.errorMessage = "IP Address/ Host already added";
 							} else {
-								this.errorMessage = "vCenter Name is already available":
+								this.errorMessage = "vCenter Name is already available";
 							}
 							$("#ErrorDialog").modal('show');
 							$("#addvc").modal('hide');
@@ -213,7 +215,11 @@ export class VcenterComponent implements AfterViewInit{
         } else {
           console.log("eroor part");
           this.errorheading = "Add vCenter Failed";
-          this.errorMessage = "Not able to reach the server";
+		  if(result == "incorrect user name or password"){
+            this.errorMessage = "Incorrect Username or Password, Authentication failed";
+          } else {
+              this.errorMessage = "Not able to reach the server";
+          }
           this.addVcenter.name = "";
           this.addVcenter.ipaddress = "";
           this.addVcenter.username = "";
@@ -249,35 +255,44 @@ export class VcenterComponent implements AfterViewInit{
 
   onEditConfirm() {
     $(".maskloader").show();
-    $("#editvc").modal('hide');
     console.log(" currentVcenter edit --- ", this.currentVcenter);
     console.log(" forEdit edit --- ", this.forEdit);
-    if(this.currentVcenter.name != this.forEdit.name){
-      console.log("this.currentVcenter.name --- ",this.currentVcenter.name);
-      this.vcenterservice.deleteVcenter(this.forEdit.name)
-      .subscribe(logmsg => {
-        console.log(this.currentVcenter);
-        console.log(logmsg.affectedRows);
-        if(logmsg.affectedRows == 1){
-          console.log("inside after delete this.currentVcenter -- ",this.currentVcenter);
-          this.vcenterservice.addVcenter(this.currentVcenter)
-           .subscribe(logmsg => {
-            console.log(logmsg);
-            this.onRefreshClick();
-            this.cleanup();
-          })
-        }
-      })
-    } else {
-      this.vcenterservice.editVcenter(this.currentVcenter.name,this.currentVcenter)
-      .subscribe(logmsg => {
-        console.log(logmsg);
-        if(logmsg == "updated"){
-          this.onRefreshClick();
-          this.cleanup();
-        }
-      })
-    }
-    $(".maskloader").hide();
+	this.vcenterservice.checkVcenter(this.currentVcenter).subscribe(result => {
+        console.log("resultin com --",result);
+        if(result == "ok"){	
+			this.vcenterservice.deleteVcenter(this.forEdit.name).subscribe(logmsg => {
+				if(logmsg.affectedRows == 1){
+					console.log("After delete",this.currentVcenter);
+					var temp = {'name':this.currentVcenter.name,'username':this.currentVcenter.username,'password':this.currentVcenter.password,'ipaddress':this.currentVcenter.ipaddress};
+					console.log("temp ---- ", temp);
+					this.vcenterservice.addVcenter(temp).subscribe(logmsg => {
+		
+						console.log("After Add");
+						this.onRefreshClick();
+			            this.cleanup();
+					})
+				}
+			})
+			$("#editvc").modal('hide');
+		}  else {
+          console.log("eroor part");
+          this.errorheading = "Add vCenter Failed";
+		  if(result == "incorrect user name or password"){
+			this.errorMessage = "Incorrect Username or Password, Authentication failed";
+		  } else {
+	          this.errorMessage = "Not able to reach the server";
+		  }
+          this.addVcenter.name = "";
+          this.addVcenter.ipaddress = "";
+          this.addVcenter.username = "";
+          this.addVcenter.password = "";
+          console.log("modal show");
+		  this.onEditCancel();
+          $("#ErrorDialog").modal('show');
+          $("#editvc").modal('hide');
+          console.log("after modal");
+      }
+	})
+	$(".maskloader").hide();
   }
 }

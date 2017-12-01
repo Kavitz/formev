@@ -9,6 +9,14 @@
   transform: translate(-50%, -50%);
 }
 
+.n-banner-nav .dropdown-menu>li>a {
+    padding-right: 10px;
+}
+
+.n-banner-tabs>li.dropdown .dropdown-menu{
+	min-width: 130px;
+}
+
 .main-content {
   height: 100%;
   width: 100%;
@@ -53,6 +61,13 @@
   height: calc(100vh - 100px);
   overflow-y: auto;
 }
+.vr-app-container-deploy{
+  padding-left: 50px;
+  padding-top: 12px;
+  padding-right: 50px;
+  height: calc(100vh - 170px);
+  overflow-y: auto;
+}
 
 .vr-app-container-Progress{
   height: 100%;
@@ -90,6 +105,11 @@ tabel-panel-section{
   margin-top: 6px;
 }
 
+.formrowcheck{
+  margin-bottom: 1px;
+  margin-top: 1px;
+}
+
 .attrlabel{
   text-align: right;
   width: 35% !important;
@@ -115,8 +135,9 @@ select {
 	border-bottom: 1px solid rgba(0, 0, 0, 0.18);
 	transition: all 0.5s;
 	padding: 3px 5px 3px 5px;*/
-  font-family: "nokia-pure-regular";
-  min-width:330px;
+  font-family: "nokia pure";
+  max-width:400px;
+  width:100%;
   line-height: 1;
   background: #fff;
   font-weight: 400;
@@ -156,22 +177,17 @@ select:disabled{
   border: none !important;
 }
 .control-div{
-  position: absolute;
-  top: 90%;
-  /* float: right; */
-  left: 0.4%;
-  width: 98%;
-  border: solid 1px #f1f1f1;
-  /* align-content: right; */
-  padding-left: 79%;
-  border-bottom: 1px solid #d6d6d6;
   background-image: -webkit-linear-gradient(top,#fff 0,#e5e5e5 100%);
   background-image: -o-linear-gradient(top,#fff 0,#e5e5e5 100%);
   background-image: -webkit-gradient(linear,left top,left bottom,from(#fff),to(#e5e5e5));
   background-image: linear-gradient(to bottom,#fff 0,#e5e5e5 100%);
   background-repeat: repeat-x;
-  z-index: 102;
   border-radius: 4px;
+  position: fixed;
+  bottom: 30px;
+  left: 0;
+  right: 0;
+  text-align: right;
 }
 
 .jqx-grid-cell-sort {
@@ -185,4 +201,22 @@ select:disabled{
 }
 .panel-body .form-control-feedback {
   right:10px;
+}
+.n-checkbox{
+  margin-bottom: 0px
+}
+.modal-open .modal {
+    overflow:hidden;
+}
+.modal-open .modal-body {
+    overflow-y: auto;
+    max-height: calc(100vh - 200px);
+    overflow-x: hidden;
+}
+.addresourceselect{
+   min-width: 280px;
+}
+
+.blockexpand{
+  pointer-events: none;
 }
