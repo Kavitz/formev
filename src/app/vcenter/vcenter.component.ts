@@ -94,8 +94,8 @@ export class VcenterComponent implements AfterViewInit{
     });
     (<any>$("#myDiv")).jqxGrid(
       {
-        width: '100%',
-	      height: auto,
+        width: 1200,
+	height: 375,
         source: dataAdapter1,
         editable: false,
         columnsResize: true, //columns resizable

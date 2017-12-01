@@ -29,6 +29,7 @@ import { OvfsService } from './ovfs/ovfs.service';
 import { ResourceConfigService } from './resourceconfig/resourceconfig.service';
 import { SimpleVMService } from './simplevm/simplevm.service';
 import { LogService } from './logs/logs.service';
+import { LoginComponent } from './login/login.component';
 import { BannerComponent } from './banner/banner.component';
 import { FooterComponent } from './footer/footer.component';
 import { VcenterComponent } from './vcenter/vcenter.component';
@@ -36,6 +37,7 @@ import { OvfsComponent } from './ovfs/ovfs.component';
 import { SimplevmComponent } from './simplevm/simplevm.component';
 import { ProgressComponent } from './progress/progress.component';
 import { LogComponent } from './logs/logs.component';
+import { HomeComponent } from './home/home.component';
 import { ResourceConfigComponent } from './resourceconfig/resourceconfig.component';
 import { AppRoutingModule } from './app-routes.module';
 
@@ -58,6 +60,8 @@ type StoreType = {
   bootstrap: [ AppComponent ],
   declarations: [
     AppComponent,
+    LoginComponent,
+    HomeComponent,
     BannerComponent,
     FooterComponent,
     ResourceConfigComponent,
